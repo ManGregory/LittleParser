@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 
 namespace Parser
 {
-        //Класс, выполняющий лексический анализ
+    //Класс, выполняющий лексический анализ
     public sealed class Scanner
     {
         //результат анализа (список лексем)
@@ -79,7 +78,7 @@ namespace Parser
                     {
                         throw new Exception("незавершенный строковый литерал");
                     }
-
+                    // пока есть символы в потоке или не нашли закрывающую кавычку
                     while ((ch = (char) input.Peek()) != '\'')
                     {                        
                         accum.Append(ch);
@@ -200,6 +199,7 @@ namespace Parser
                             }                            
                             break;
                         default:
+                            // считываем символ из потока
                             input.Read();
                             break;
                     }
@@ -207,12 +207,18 @@ namespace Parser
             }
         }
 
+        /// <summary>
+        /// Добавление идентификатора в таблицу
+        /// </summary>
+        /// <param name="lexem">Идентификатор</param>
         private void AddLexem(string lexem)
         {
+            // Идентификатор уже есть, увеличиваем количество вхождений
             if (_result.ContainsKey(lexem.ToLower()))
             {
                 _result[lexem.ToLower()]++;
             }
+            // Новый идентификатор, добавляем в таблицу
             else
             {
                 _result.Add(lexem.ToLower(), 1);
